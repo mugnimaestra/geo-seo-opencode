@@ -2,14 +2,15 @@
 set -euo pipefail
 
 # ============================================================
-# GEO-SEO Claude Code Skill Installer
-# Installs the GEO-first SEO analysis tool for Claude Code
+# GEO-SEO OpenCode Skill Installer
+# Installs the GEO-first SEO analysis tool for OpenCode
 # ============================================================
 
 REPO_URL="https://github.com/zubair-trabzada/geo-seo-claude.git"
-CLAUDE_DIR="${HOME}/.claude"
-SKILLS_DIR="${CLAUDE_DIR}/skills"
-AGENTS_DIR="${CLAUDE_DIR}/agents"
+OPENCODE_DIR="${HOME}/.config/opencode"
+SKILLS_DIR="${OPENCODE_DIR}/skills"
+AGENTS_DIR="${OPENCODE_DIR}/agents"
+COMMANDS_DIR="${OPENCODE_DIR}/command"
 INSTALL_DIR="${SKILLS_DIR}/geo"
 TEMP_DIR=$(mktemp -d)
 
@@ -29,7 +30,7 @@ NC='\033[0m' # No Color
 print_header() {
     echo ""
     echo -e "${BLUE}╔══════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║   GEO-SEO Claude Code Skill Installer    ║${NC}"
+    echo -e "${BLUE}║   GEO-SEO OpenCode Skill Installer       ║${NC}"
     echo -e "${BLUE}║   GEO-First AI Search Optimization       ║${NC}"
     echo -e "${BLUE}╚══════════════════════════════════════════╝${NC}"
     echo ""
@@ -93,11 +94,11 @@ main() {
     fi
     print_success "Python found: $($PYTHON_CMD --version)"
 
-    # Check for Claude Code
-    if ! command -v claude &> /dev/null; then
-        print_warning "Claude Code CLI not found in PATH."
-        echo "  This tool requires Claude Code to function."
-        echo "  Install: npm install -g @anthropic-ai/claude-code"
+    # Check for OpenCode
+    if ! command -v opencode &> /dev/null; then
+        print_warning "OpenCode CLI not found in PATH."
+        echo "  This tool requires OpenCode to function."
+        echo "  Install: https://opencode.ai"
         echo ""
         if [ "$INTERACTIVE" = true ]; then
             read -p "Continue installation anyway? (y/n): " -n 1 -r
@@ -109,7 +110,7 @@ main() {
             print_info "Non-interactive mode — continuing anyway..."
         fi
     else
-        print_success "Claude Code CLI found"
+        print_success "OpenCode CLI found"
     fi
 
     # ---- Create Directories ----
@@ -117,6 +118,7 @@ main() {
 
     mkdir -p "$SKILLS_DIR"
     mkdir -p "$AGENTS_DIR"
+    mkdir -p "$COMMANDS_DIR"
     mkdir -p "$INSTALL_DIR"
     mkdir -p "$INSTALL_DIR/scripts"
     mkdir -p "$INSTALL_DIR/schema"
@@ -134,7 +136,7 @@ main() {
         SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)" || true
     fi
 
-    if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/geo/SKILL.md" ]; then
+    if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/.opencode/skills/geo/SKILL.md" ]; then
         print_info "Installing from local directory..."
         SOURCE_DIR="$SCRIPT_DIR"
     else
@@ -149,14 +151,14 @@ main() {
     # ---- Install Main Skill ----
     print_info "Installing main GEO skill..."
 
-    cp -r "$SOURCE_DIR/geo/"* "$INSTALL_DIR/"
+    cp -r "$SOURCE_DIR/.opencode/skills/geo/"* "$INSTALL_DIR/"
     print_success "Main skill installed → ${INSTALL_DIR}/"
 
     # ---- Install Sub-Skills ----
     print_info "Installing sub-skills..."
 
     SKILL_COUNT=0
-    for skill_dir in "$SOURCE_DIR/skills"/*/; do
+    for skill_dir in "$SOURCE_DIR/.opencode/skills"/geo-*/; do
         if [ -d "$skill_dir" ]; then
             skill_name=$(basename "$skill_dir")
             target_dir="${SKILLS_DIR}/${skill_name}"
@@ -172,7 +174,7 @@ main() {
     print_info "Installing subagents..."
 
     AGENT_COUNT=0
-    for agent_file in "$SOURCE_DIR/agents/"*.md; do
+    for agent_file in "$SOURCE_DIR/.opencode/agent/"*.md; do
         if [ -f "$agent_file" ]; then
             cp "$agent_file" "$AGENTS_DIR/"
             AGENT_COUNT=$((AGENT_COUNT + 1))
@@ -180,6 +182,19 @@ main() {
         fi
     done
     echo "  → ${AGENT_COUNT} subagents installed"
+
+    # ---- Install Commands ----
+    print_info "Installing commands..."
+
+    COMMAND_COUNT=0
+    for cmd_file in "$SOURCE_DIR/.opencode/command/"*.md; do
+        if [ -f "$cmd_file" ]; then
+            cp "$cmd_file" "$COMMANDS_DIR/"
+            COMMAND_COUNT=$((COMMAND_COUNT + 1))
+            print_success "  $(basename "$cmd_file")"
+        fi
+    done
+    echo "  → ${COMMAND_COUNT} commands installed"
 
     # ---- Install Scripts ----
     print_info "Installing utility scripts..."
@@ -245,6 +260,7 @@ main() {
     [ -f "$INSTALL_DIR/SKILL.md" ] && print_success "Main skill file" || { print_error "Main skill file missing"; VERIFY_OK=false; }
     [ -d "$SKILLS_DIR/geo-audit" ] && print_success "Sub-skills directory" || { print_error "Sub-skills missing"; VERIFY_OK=false; }
     [ "$(ls "$AGENTS_DIR"/geo-*.md 2>/dev/null | wc -l)" -gt 0 ] && print_success "Agent files" || { print_error "Agent files missing"; VERIFY_OK=false; }
+    [ "$(ls "$COMMANDS_DIR"/geo-*.md 2>/dev/null | wc -l)" -gt 0 ] && print_success "Command files" || { print_error "Command files missing"; VERIFY_OK=false; }
     [ -d "$INSTALL_DIR/scripts" ] && print_success "Utility scripts" || { print_error "Scripts missing"; VERIFY_OK=false; }
     [ -d "$INSTALL_DIR/schema" ] && print_success "Schema templates" || { print_error "Schema templates missing"; VERIFY_OK=false; }
 
@@ -257,29 +273,30 @@ main() {
     echo "  Installed to: ${INSTALL_DIR}"
     echo "  Skills:       ${SKILL_COUNT} sub-skills"
     echo "  Agents:       ${AGENT_COUNT} subagents"
+    echo "  Commands:     ${COMMAND_COUNT} commands"
     echo ""
     echo -e "${BLUE}Quick Start:${NC}"
-    echo "  Open Claude Code and try:"
+    echo "  Open OpenCode and try:"
     echo ""
-    echo "    /geo audit https://example.com"
-    echo "    /geo quick https://example.com"
-    echo "    /geo citability https://example.com/blog/article"
-    echo "    /geo crawlers https://example.com"
-    echo "    /geo report https://example.com"
+    echo "    /geo-audit https://example.com"
+    echo "    /geo-quick https://example.com"
+    echo "    /geo-citability https://example.com/blog/article"
+    echo "    /geo-crawlers https://example.com"
+    echo "    /geo-report https://example.com"
     echo ""
     echo -e "${BLUE}Available Commands:${NC}"
-    echo "    /geo audit <url>      Full GEO + SEO audit"
-    echo "    /geo quick <url>      60-second visibility snapshot"
-    echo "    /geo citability <url> AI citation readiness score"
-    echo "    /geo crawlers <url>   AI crawler access check"
-    echo "    /geo llmstxt <url>    Analyze/generate llms.txt"
-    echo "    /geo brands <url>     Brand mention scan"
-    echo "    /geo platforms <url>  Platform-specific optimization"
-    echo "    /geo schema <url>     Structured data analysis"
-    echo "    /geo technical <url>  Technical SEO audit"
-    echo "    /geo content <url>    Content quality & E-E-A-T"
-    echo "    /geo report <url>     Client-ready GEO report"
-    echo "    /geo report-pdf       Generate PDF report from audit data"
+    echo "    /geo-audit <url>      Full GEO + SEO audit"
+    echo "    /geo-quick <url>      60-second visibility snapshot"
+    echo "    /geo-citability <url> AI citation readiness score"
+    echo "    /geo-crawlers <url>   AI crawler access check"
+    echo "    /geo-llmstxt <url>    Analyze/generate llms.txt"
+    echo "    /geo-brands <url>     Brand mention scan"
+    echo "    /geo-platforms <url>  Platform-specific optimization"
+    echo "    /geo-schema <url>     Structured data analysis"
+    echo "    /geo-technical <url>  Technical SEO audit"
+    echo "    /geo-content <url>    Content quality & E-E-A-T"
+    echo "    /geo-report <url>     Client-ready GEO report"
+    echo "    /geo-report-pdf       Generate PDF report from audit data"
     echo ""
     echo "  Documentation: https://github.com/zubair-trabzada/geo-seo-claude"
     echo ""

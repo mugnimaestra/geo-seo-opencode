@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="GEO-SEO Claude Code Skill" width="900"/>
+  <img src="assets/banner.svg" alt="GEO-SEO OpenCode Skill" width="900"/>
 </p>
 
 <p align="center">
@@ -9,6 +9,10 @@
 
 <p align="center">
   AI search is eating traditional search. This tool optimizes for where traffic is going, not where it was.
+</p>
+
+<p align="center">
+  <em>🔀 OpenCode adaptation of <a href="https://github.com/zubair-trabzada/geo-seo-claude">geo-seo-claude</a> by <a href="https://github.com/zubair-trabzada">Zubair Trabzada</a></em>
 </p>
 
 ---
@@ -31,21 +35,21 @@
 ### One-Command Install (macOS/Linux)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/geo-seo-claude/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mugnimaestra/geo-seo-opencode/main/install.sh | bash
 ```
 
 ### Manual Install
 
 ```bash
-git clone https://github.com/zubair-trabzada/geo-seo-claude.git
-cd geo-seo-claude
+git clone https://github.com/mugnimaestra/geo-seo-opencode.git
+cd geo-seo-opencode
 ./install.sh
 ```
 
 ### Requirements
 
 - Python 3.8+
-- Claude Code CLI
+- OpenCode CLI
 - Git
 - Optional: Playwright (for screenshots)
 
@@ -53,66 +57,68 @@ cd geo-seo-claude
 
 ## Commands
 
-Open Claude Code and use these commands:
+Open OpenCode and use these commands:
 
 | Command | What It Does |
 |---------|-------------|
-| `/geo audit <url>` | Full GEO + SEO audit with parallel subagents |
-| `/geo quick <url>` | 60-second GEO visibility snapshot |
-| `/geo citability <url>` | Score content for AI citation readiness |
-| `/geo crawlers <url>` | Check AI crawler access (robots.txt) |
-| `/geo llmstxt <url>` | Analyze or generate llms.txt |
-| `/geo brands <url>` | Scan brand mentions across AI-cited platforms |
-| `/geo platforms <url>` | Platform-specific optimization |
-| `/geo schema <url>` | Structured data analysis & generation |
-| `/geo technical <url>` | Technical SEO audit |
-| `/geo content <url>` | Content quality & E-E-A-T assessment |
-| `/geo report <url>` | Generate client-ready GEO report |
-| `/geo report-pdf` | Generate professional PDF report with charts & visualizations |
+| `/geo-audit <url>` | Full GEO + SEO audit with parallel subagents |
+| `/geo-quick <url>` | 60-second GEO visibility snapshot |
+| `/geo-citability <url>` | Score content for AI citation readiness |
+| `/geo-crawlers <url>` | Check AI crawler access (robots.txt) |
+| `/geo-llmstxt <url>` | Analyze or generate llms.txt |
+| `/geo-brands <url>` | Scan brand mentions across AI-cited platforms |
+| `/geo-platforms <url>` | Platform-specific optimization |
+| `/geo-schema <url>` | Structured data analysis & generation |
+| `/geo-technical <url>` | Technical SEO audit |
+| `/geo-content <url>` | Content quality & E-E-A-T assessment |
+| `/geo-report <url>` | Generate client-ready GEO report |
+| `/geo-report-pdf` | Generate professional PDF report with charts & visualizations |
 
 ---
 
 ## Architecture
 
 ```
-geo-seo-claude/
-├── geo/                          # Main skill orchestrator
-│   └── SKILL.md                  # Primary skill file with commands & routing
-├── skills/                       # 11 specialized sub-skills
-│   ├── geo-audit/                # Full audit orchestration & scoring
-│   ├── geo-citability/           # AI citation readiness scoring
-│   ├── geo-crawlers/             # AI crawler access analysis
-│   ├── geo-llmstxt/              # llms.txt standard analysis & generation
-│   ├── geo-brand-mentions/       # Brand presence on AI-cited platforms
-│   ├── geo-platform-optimizer/   # Platform-specific AI search optimization
-│   ├── geo-schema/               # Structured data for AI discoverability
-│   ├── geo-technical/            # Technical SEO foundations
-│   ├── geo-content/              # Content quality & E-E-A-T
-│   ├── geo-report/               # Client-ready markdown report generation
-│   └── geo-report-pdf/           # Professional PDF report with charts
-├── agents/                       # 5 parallel subagents
-│   ├── geo-ai-visibility.md      # GEO audit, citability, crawlers, brands
-│   ├── geo-platform-analysis.md  # Platform-specific optimization
-│   ├── geo-technical.md          # Technical SEO analysis
-│   ├── geo-content.md            # Content & E-E-A-T analysis
-│   └── geo-schema.md             # Schema markup analysis
-├── scripts/                      # Python utilities
-│   ├── fetch_page.py             # Page fetching & parsing
-│   ├── citability_scorer.py      # AI citability scoring engine
-│   ├── brand_scanner.py          # Brand mention detection
-│   ├── llmstxt_generator.py      # llms.txt validation & generation
-│   └── generate_pdf_report.py    # PDF report generator (ReportLab)
-├── schema/                       # JSON-LD templates
-│   ├── organization.json         # Organization schema (with sameAs)
-│   ├── local-business.json       # LocalBusiness schema
-│   ├── article-author.json       # Article + Person schema (E-E-A-T)
-│   ├── software-saas.json        # SoftwareApplication schema
-│   ├── product-ecommerce.json    # Product schema with offers
-│   └── website-searchaction.json # WebSite + SearchAction schema
-├── install.sh                    # One-command installer
-├── uninstall.sh                  # Uninstaller
-├── requirements.txt              # Python dependencies
-└── README.md                     # This file
+geo-seo-opencode/
+├── .opencode/
+│   ├── skills/                    # 11 specialized sub-skills + main orchestrator
+│   │   ├── geo/                   # Main skill orchestrator
+│   │   │   └── SKILL.md           # Primary skill file with commands & routing
+│   │   ├── geo-audit/             # Full audit orchestration & scoring
+│   │   ├── geo-citability/        # AI citation readiness scoring
+│   │   ├── geo-crawlers/          # AI crawler access analysis
+│   │   ├── geo-llmstxt/           # llms.txt standard analysis & generation
+│   │   ├── geo-brand-mentions/    # Brand presence on AI-cited platforms
+│   │   ├── geo-platform-optimizer/# Platform-specific AI search optimization
+│   │   ├── geo-schema/            # Structured data for AI discoverability
+│   │   ├── geo-technical/         # Technical SEO foundations
+│   │   ├── geo-content/           # Content quality & E-E-A-T
+│   │   ├── geo-report/            # Client-ready markdown report generation
+│   │   └── geo-report-pdf/        # Professional PDF report with charts
+│   ├── agent/                     # 5 parallel subagents
+│   │   ├── geo-ai-visibility.md   # GEO audit, citability, crawlers, brands
+│   │   ├── geo-platform-analysis.md # Platform-specific optimization
+│   │   ├── geo-technical.md       # Technical SEO analysis
+│   │   ├── geo-content.md         # Content & E-E-A-T analysis
+│   │   └── geo-schema.md          # Schema markup analysis
+│   └── command/                   # Slash command definitions
+├── scripts/                       # Python utilities
+│   ├── fetch_page.py              # Page fetching & parsing
+│   ├── citability_scorer.py       # AI citability scoring engine
+│   ├── brand_scanner.py           # Brand mention detection
+│   ├── llmstxt_generator.py       # llms.txt validation & generation
+│   └── generate_pdf_report.py     # PDF report generator (ReportLab)
+├── schema/                        # JSON-LD templates
+│   ├── organization.json          # Organization schema (with sameAs)
+│   ├── local-business.json        # LocalBusiness schema
+│   ├── article-author.json        # Article + Person schema (E-E-A-T)
+│   ├── software-saas.json         # SoftwareApplication schema
+│   ├── product-ecommerce.json     # Product schema with offers
+│   └── website-searchaction.json  # WebSite + SearchAction schema
+├── install.sh                     # One-command installer
+├── uninstall.sh                   # Uninstaller
+├── requirements.txt               # Python dependencies
+└── README.md                      # This file
 ```
 
 ---
@@ -121,7 +127,7 @@ geo-seo-claude/
 
 ### Full Audit Flow
 
-When you run `/geo audit https://example.com`:
+When you run `/geo-audit https://example.com`:
 
 1. **Discovery** — Fetches homepage, detects business type, crawls sitemap
 2. **Parallel Analysis** — Launches 5 subagents simultaneously:
@@ -187,7 +193,7 @@ Generates professional GEO reports in markdown or PDF format. PDF reports includ
 
 Or manually:
 ```bash
-rm -rf ~/.claude/skills/geo ~/.claude/skills/geo-* ~/.claude/agents/geo-*.md
+rm -rf ~/.config/opencode/skills/geo ~/.config/opencode/skills/geo-* ~/.config/opencode/agents/geo-*.md
 ```
 
 ---
@@ -205,6 +211,12 @@ Inside you'll get:
 - **GEO agency pricing & templates** — Proposal docs, cold outreach scripts, onboarding workflows
 
 GEO agencies charge $2K–$12K/month. This tool does the audit. The community teaches you how to sell it.
+
+---
+
+## Attribution
+
+This project is an [OpenCode](https://opencode.ai) adaptation of [geo-seo-claude](https://github.com/zubair-trabzada/geo-seo-claude) by [Zubair Trabzada](https://github.com/zubair-trabzada). The original tool was built for Claude Code — this fork restructures it for OpenCode's skill/agent/command system.
 
 ---
 

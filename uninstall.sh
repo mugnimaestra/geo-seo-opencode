@@ -2,12 +2,13 @@
 set -euo pipefail
 
 # ============================================================
-# GEO-SEO Claude Code Skill Uninstaller
+# GEO-SEO OpenCode Skill Uninstaller
 # ============================================================
 
-CLAUDE_DIR="${HOME}/.claude"
-SKILLS_DIR="${CLAUDE_DIR}/skills"
-AGENTS_DIR="${CLAUDE_DIR}/agents"
+OPENCODE_DIR="${HOME}/.config/opencode"
+SKILLS_DIR="${OPENCODE_DIR}/skills"
+AGENTS_DIR="${OPENCODE_DIR}/agents"
+COMMANDS_DIR="${OPENCODE_DIR}/command"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -16,7 +17,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 echo ""
-echo -e "${YELLOW}GEO-SEO Claude Code Skill Uninstaller${NC}"
+echo -e "${YELLOW}GEO-SEO OpenCode Skill Uninstaller${NC}"
 echo ""
 echo "This will remove the following:"
 echo ""
@@ -28,6 +29,9 @@ for skill_dir in "$SKILLS_DIR"/geo-*/; do
 done
 for agent_file in "$AGENTS_DIR"/geo-*.md; do
     [ -f "$agent_file" ] && echo "  → ${agent_file}"
+done
+for cmd_file in "$COMMANDS_DIR"/geo-*.md; do
+    [ -f "$cmd_file" ] && echo "  → ${cmd_file}"
 done
 
 echo ""
@@ -62,6 +66,15 @@ for agent_file in "$AGENTS_DIR"/geo-*.md; do
         agent_name=$(basename "$agent_file")
         rm -f "$agent_file"
         echo -e "${GREEN}✓ Removed ${agent_name}${NC}"
+    fi
+done
+
+# Remove commands
+for cmd_file in "$COMMANDS_DIR"/geo-*.md; do
+    if [ -f "$cmd_file" ]; then
+        cmd_name=$(basename "$cmd_file")
+        rm -f "$cmd_file"
+        echo -e "${GREEN}✓ Removed ${cmd_name}${NC}"
     fi
 done
 
