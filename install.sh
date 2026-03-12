@@ -6,7 +6,7 @@ set -euo pipefail
 # Installs the GEO-first SEO analysis tool for OpenCode
 # ============================================================
 
-REPO_URL="https://github.com/zubair-trabzada/geo-seo-claude.git"
+REPO_URL="https://github.com/mugnimaestra/geo-seo-opencode.git"
 OPENCODE_DIR="${HOME}/.config/opencode"
 SKILLS_DIR="${OPENCODE_DIR}/skills"
 AGENTS_DIR="${OPENCODE_DIR}/agents"
@@ -151,7 +151,12 @@ main() {
     # ---- Install Main Skill ----
     print_info "Installing main GEO skill..."
 
-    cp -r "$SOURCE_DIR/.opencode/skills/geo/"* "$INSTALL_DIR/"
+    if [ -f "$SOURCE_DIR/.opencode/skills/geo/SKILL.md" ]; then
+        cp "$SOURCE_DIR/.opencode/skills/geo/SKILL.md" "$INSTALL_DIR/"
+    else
+        print_error "Main skill file (SKILL.md) not found in repository"
+        exit 1
+    fi
     print_success "Main skill installed → ${INSTALL_DIR}/"
 
     # ---- Install Sub-Skills ----
@@ -298,7 +303,7 @@ main() {
     echo "    /geo-report <url>     Client-ready GEO report"
     echo "    /geo-report-pdf       Generate PDF report from audit data"
     echo ""
-    echo "  Documentation: https://github.com/zubair-trabzada/geo-seo-claude"
+    echo "  Documentation: https://github.com/mugnimaestra/geo-seo-opencode"
     echo ""
 }
 
